@@ -1,5 +1,6 @@
 #include<iostream>
 #include<fstream>
+
 using namespace std;
 
 class shopping
@@ -154,7 +155,7 @@ void shopping:: buyer()
 	
 		case 2:
 			menu();
-			
+			break;
 			
 		default:
 			cout<<"invalid choice";
@@ -339,9 +340,10 @@ void shopping::list()
 void shopping::receipt()
 {
 	fstream data;
+	
 	int arrc[100];
 	int arrq[100];
-	char choice;
+	string choice;
 	int c=0;
 	float amount=0;
 	float dis=0;
@@ -378,31 +380,34 @@ void shopping::receipt()
 					goto m;
 				}
 			}
-			c++;
+			c=c+1;
 			cout<<"\n\n Do you wish to buy another product? If yes then press y else press any key ";
 			cin>>choice;
 		}
-		while(choice=='y');
+		while(choice=="y");
 		
 		cout<<"\n\n\t\t\t_________________________RECEIPT_________________________\n";
-		cout<<"\nProduct No\t Product Name\t Product quantity\tPrice\tAmount\tAmount with discout\n";
-		
-		for(int i=0;i<c;i++)
+		cout<<"\nProduct No\t Product Name\t Product quantity\tPrice\tAmount\tAmount with discount\n";
+		int i=0;
+		while(i<c)
 		{
 			data.open("database.txt",ios::in);
 			data>>pcode>>pname>>price>>dis;
 			while(!data.eof())
 			{
-				if(pcode==arrc[i])
+				if(pcode==arrc[i]&&arrq[i]>0)
 				{
 					amount=price*arrq[i];
 					dis=amount-(amount*dis/100);
 					total=total+dis;
-					cout<<"\n"<<pcode<<"\t\t"<<pname<<"\t\t"<<arrq[i]<<"\t\t"<<price<<"\t"<<amount<<"\t\t"<<dis;
+					
+					cout<<"\n"<<pcode<<"\t\t"<<pname<<"\t\t\t"<<arrq[i]<<"\t\t"<<price<<"\t"<<amount<<"\t\t"<<dis;
 					
 				}
 				data>>pcode>>pname>>price>>dis;
+				i++;
 			}
+			
 		}
 		data.close();
 	}
